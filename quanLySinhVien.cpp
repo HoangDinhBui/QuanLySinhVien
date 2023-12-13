@@ -37,6 +37,7 @@ void inSinhVien(SV *sv, int soSinhVien)
         printf("%s      %d      %s      %f\n", sv->Ten, sv->mssv, sv->ngaySinh, sv->gpa);
     }
 }
+//ham main
 int main()
 {
     int soSinhVien;
