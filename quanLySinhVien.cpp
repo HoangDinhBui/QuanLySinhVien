@@ -37,7 +37,6 @@ void inSinhVien(SV *sv, int soSinhVien)
         printf("%s      %d      %s      %f\n", sv->Ten, sv->mssv, sv->ngaySinh, sv->gpa);
     }
 }
-//ham main
 int main()
 {
     int soSinhVien;
@@ -46,7 +45,7 @@ int main()
     SV *sinhVien;
     sinhVien = (SV*) malloc (soSinhVien * sizeof(SV));
     int tieptuc = 1;
-    while(tieptuc)
+    while(tieptuc)//vong lap de thuc hien menu
     {
         printf("******************************************\n");
         printf("##  CHUONG TRINH QUAN LY SINH VIEN      ##\n");
