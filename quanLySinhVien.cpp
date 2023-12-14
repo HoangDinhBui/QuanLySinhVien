@@ -3,7 +3,7 @@
 #include <stdlib.h>
 typedef struct SinhVien{
     char Ten[30];
-    int mssv;
+    long long mssv;
     char ngaySinh[30];
     float gpa;
 }SV;
@@ -14,12 +14,12 @@ void nhapSinhVien(SV *sv, int soSinhVien)
     printf("****** Nhap thong tin sinh vien ******\n");
     for (int i = 0; i < soSinhVien; i++)
     {
-        printf("Sinh vien %d: \n", i - 1);
+        printf("-------Sinh vien %d-------\n", i + 1);
         printf("Ho va ten: ");
         fgets(sv[i].Ten, sizeof(sv[i].Ten), stdin);
         sv[i].Ten[strcspn(sv[i].Ten, "\n")] = '\0';
         printf("Ma so sinh vien: ");
-        scanf("%d", &sv->mssv);
+        scanf("%ld", &sv->mssv);
         printf("Ngay thang nam sinh: ");
         scanf("%s", &sv->ngaySinh);
         sv[i].ngaySinh[strcspn(sv[i].ngaySinh, "\n")] = '\0';
@@ -33,19 +33,31 @@ void inSinhVien(SV *sv, int soSinhVien)
 {
     for (int i = 1; i <= soSinhVien; i++)
     {
-        printf("Sinh vien %d: \n", i);
-        printf("%s      %d      %s      %f\n", sv->Ten, sv->mssv, sv->ngaySinh, sv->gpa);
+        printf("    ---------Sinh vien %d----------\n", i);
+        printf("%s      %ld      %s      %0.2f\n", sv->Ten, sv->mssv, sv->ngaySinh, sv->gpa);
     }
+}
+//ham sap xep sinh vien theo diem trung binh
+void sapXep(SV *sv, int soSinhVien)
+{
+    for (int i = 0; i < soSinhVien; i++)
+    {
+        if(sv[i].gpa > sv[i + 1].gpa)
+        {
+            SV tmp = sv[i];
+            sv[i] = sv[i + 1];
+            sv[i + 1] = tmp;
+        }
+    }
+    inSinhVien(sv, soSinhVien);
 }
 int main()
 {
     int soSinhVien;
-    printf("Nhap so sinh vien cua lop: ");
-    scanf("%d", &soSinhVien);
     SV *sinhVien;
     sinhVien = (SV*) malloc (soSinhVien * sizeof(SV));
     int tieptuc = 1;
-    while(tieptuc)//vong lap de thuc hien menu
+    while(tieptuc)
     {
         printf("******************************************\n");
         printf("##  CHUONG TRINH QUAN LY SINH VIEN      ##\n");
@@ -62,12 +74,15 @@ int main()
         switch (choose)
         {
             case 1:
+                printf("Nhap so sinh vien cua lop: ");
+                scanf("%d", &soSinhVien);
                 nhapSinhVien(sinhVien, soSinhVien);
                 break;
             case 2:
                 inSinhVien(sinhVien, soSinhVien);
                 break;
             case 3:
+                sapXep(sinhVien, soSinhVien);
                 break;
             case 4:
                 break;
