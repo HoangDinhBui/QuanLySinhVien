@@ -51,6 +51,35 @@ void sapXep(SV *sv, int soSinhVien)
     }
     inSinhVien(sv, soSinhVien);
 }
+//ham xep loai sinh vien
+void xepLoai(SV *sv, int soSinhVien)
+{
+    if(sv->gpa >= 3.6 && sv->gpa <= 4)
+    {
+        printf("Xuat sac.");
+    }
+    else if(sv->gpa >= 3.2 && sv->gpa < 3.6)
+    {
+        printf("Gioi.");
+    }
+    else if(sv->gpa >= 2.5 && sv->gpa < 3.2)
+    {
+        printf("Kha.");
+    }
+    else if(sv->gpa >= 2 && sv->gpa < 2.5)
+    {
+        printf("Trung binh.");
+    }
+    else if(sv->gpa >= 1 && sv->gpa < 2)
+    {
+        printf("Yeu.");
+    }
+    else if(sv->gpa < 1)
+    {
+        printf("Hoc lai.");
+    }
+}
+//ham main
 int main()
 {
     int soSinhVien;
@@ -85,6 +114,12 @@ int main()
                 sapXep(sinhVien, soSinhVien);
                 break;
             case 4:
+                for (int i = 0; i < soSinhVien; i++)
+                {
+                    printf("Hoc luc cua sinh vien %d: ", i + 1);
+                    xepLoai(sinhVien, soSinhVien);
+                    printf("\n");
+                }
                 break;
             case 5:
                 break;
