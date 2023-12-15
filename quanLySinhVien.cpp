@@ -22,7 +22,7 @@ void addStudent(ST *stArr, int *numOfStudent)
     scanf("%lld", &student.id);
     printf("\nNhap ngay thang nam sinh: ");
     while(getchar() != '\n');
-    scanf("%12s", student.dob);
+    scanf("%s", student.dob);
     printf("\nNhap diem GPA: ");
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
@@ -35,15 +35,11 @@ void printStudent(ST *stArr, int numOfStudent)
     printf("    Ten              MSSV         Ngay sinh         GPA\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("%s                %lld     %s           %f", stArr[i].name, stArr[i].id, stArr[i].dob, stArr[i].gpa);
+        printf("%s                %lld     %s           %f",
+        stArr[i].name, stArr[i].id, stArr[i].dob, stArr[i].gpa);
         printf("\n");
     }
 }
-//Func of check ID student in "Func of update student's information
-//bool checkID(ST stArr, long long inputID)
-//{
-//    return stArr.id == inputID;
-//}
 //Func of update student's information
 void updateInfor(ST *stArr, int ordinal)
 {
@@ -55,26 +51,39 @@ void updateInfor(ST *stArr, int ordinal)
     scanf("%lld", &student.id);
     printf("\nNhap ngay thang nam sinh: ");
     while(getchar() != '\n');
-    scanf("%12s", student.dob);
+    scanf("%s", student.dob);
     printf("\nNhap diem GPA: ");
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
-    stArr[ordinal - 1] = student;
+    stArr[ordinal] = student;
     printf("Thong tin da duoc cap nhat!\n");
 }
 //Function of delete student
-void deleteStudent(ST *st, int ordinal, int *numOfStudent)
+void deleteStudent(ST *stArr, int ordinal, int *numOfStudent)
 {
-    if(ordinal < 0 || ordinal >= *numOfStudent)
+    if(ordinal < 0 || ordinal > *numOfStudent)
     {
         printf("So thu tu sinh vien khong chinh xac!");
         return;
     }
-    for (int i = ordinal; i < *numOfStudent - 1; i++)
+    for (int i = ordinal; i <= *numOfStudent; i++)
     {
-        st[i] = st[i + 1];
+        stArr[i] = stArr[i + 1];
     }
     (*numOfStudent)--;
+}
+//Function of find student by student's name
+void findStudent(ST *stArr, const char *inputName, int *numOfStudent)
+{
+    for(int i = 0; i < *numOfStudent; i++)
+    {
+        if(strcmp(stArr[i].name, inputName) == 0)
+        {
+            printf("%s                %lld     %s           %f", 
+            stArr[i].name, stArr[i].id, stArr[i].dob, stArr[i].gpa);
+            printf("\n");
+        }
+    }
 }
 int main()
 {
@@ -112,6 +121,11 @@ int main()
                 deleteStudent(stArr, ordinal, &numOfStudent);
                 break;
             case 4:
+                char inputName[30];
+                printf("Nhap ten sinh vien can tim kiem: ");
+                while(getchar() != '\n');
+                fgets(inputName, sizeof(inputName), stdin);
+                findStudent(stArr, inputName ,&numOfStudent);
                 break;
             case 5:
                 break;
