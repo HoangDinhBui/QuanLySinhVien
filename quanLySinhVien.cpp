@@ -1,142 +1,67 @@
 #include <stdio.h>
-#include <string.h>
+#include <windows.h>
 #include <stdlib.h>
-typedef struct SinhVien{
-    char Ten[30];
-    long long mssv;
-    char ngaySinh[30];
+#include <math.h>
+typedef struct Students{
+    char name[30];
+    long long id;
+    char dob[13];
     float gpa;
-}SV;
-//ham nhap sinh vien
-void nhapSinhVien(SV *sv, int soSinhVien)
+}ST;
+void addStudents(ST *stArr, int *numOfStudent)
 {
-    while (getchar() != '\n');
-    printf("****** Nhap thong tin sinh vien ******\n");
-    for (int i = 0; i < soSinhVien; i++)
-    {
-        printf("-------Sinh vien %d-------\n", i + 1);
-        printf("Ho va ten: ");
-        fgets(sv[i].Ten, sizeof(sv[i].Ten), stdin);
-        sv[i].Ten[strcspn(sv[i].Ten, "\n")] = '\0';
-        printf("Ma so sinh vien: ");
-        scanf("%ld", &sv->mssv);
-        printf("Ngay thang nam sinh: ");
-        scanf("%s", &sv->ngaySinh);
-        sv[i].ngaySinh[strcspn(sv[i].ngaySinh, "\n")] = '\0';
-        printf("Diem GPA: ");
-        scanf("%f", &sv->gpa);
-        while (getchar() != '\n');
-    } 
+    ST student;
+    printf("\nNhap ten sinh vien: ");
+    while(getchar() != '\n');
+    fgets(student.name, sizeof(student.name), stdin);
+    printf("\nNhap ma so sinh vien: ");
+    scanf("%ld", &student.id);
+    printf("\nNhap ngay thang nam sinh: ");
+    while(getchar() != '\n');
+    scanf("%c", &student.dob);
+    printf("\nNhap diem GPA: ");
+    scanf("%f", &student.gpa);
+    stArr[*numOfStudent] = student;
+    (*numOfStudent)++;
+    printf("\nThem sinh vien thanh cong!");
 }
-//ham in thong tin sinh vien
-void inSinhVien(SV *sv, int soSinhVien)
-{
-    for (int i = 1; i <= soSinhVien; i++)
-    {
-        printf("    ---------Sinh vien %d----------\n", i);
-        printf("%s      %ld      %s      %0.2f\n", sv->Ten, sv->mssv, sv->ngaySinh, sv->gpa);
-    }
-}
-//ham sap xep sinh vien theo diem trung binh
-void sapXep(SV *sv, int soSinhVien)
-{
-    for (int i = 0; i < soSinhVien; i++)
-    {
-        if(sv[i].gpa > sv[i + 1].gpa)
-        {
-            SV tmp = sv[i];
-            sv[i] = sv[i + 1];
-            sv[i + 1] = tmp;
-        }
-    }
-    inSinhVien(sv, soSinhVien);
-}
-//ham xep loai sinh vien
-void xepLoai(SV *sv, int soSinhVien)
-{
-    if(sv->gpa >= 3.6 && sv->gpa <= 4)
-    {
-        printf("Xuat sac.");
-    }
-    else if(sv->gpa >= 3.2 && sv->gpa < 3.6)
-    {
-        printf("Gioi.");
-    }
-    else if(sv->gpa >= 2.5 && sv->gpa < 3.2)
-    {
-        printf("Kha.");
-    }
-    else if(sv->gpa >= 2 && sv->gpa < 2.5)
-    {
-        printf("Trung binh.");
-    }
-    else if(sv->gpa >= 1 && sv->gpa < 2)
-    {
-        printf("Yeu.");
-    }
-    else if(sv->gpa < 1)
-    {
-        printf("Hoc lai.");
-    }
-}
-//ham main
 int main()
 {
-    int soSinhVien;
-    SV *sinhVien;
-    sinhVien = (SV*) malloc (soSinhVien * sizeof(SV));
-    int tieptuc = 1;
-    while(tieptuc)
-    {
-        printf("******************************************\n");
-        printf("##  CHUONG TRINH QUAN LY SINH VIEN      ##\n");
-        printf("##   1. Nhap thong tin sinh vien.       ##\n");
-        printf("##   2. In thong tin sinh vien.         ##\n");
-        printf("##   3. Sap xep sinh vien theo diem TB. ##\n");
-        printf("##   4. Xep loai sinh vien.             ##\n");
-        printf("##   5. Xuat danh sach sinh vien.       ##\n");
-        printf("##   0. Thoat.                          ##\n");
-        printf("******************************************\n");
-        printf("##   Lua chon cua ban: "); printf("\t\t\t##\n");
-        int choose;
-        scanf("%d", &choose);
-        switch (choose)
-        {
-            case 1:
-                printf("Nhap so sinh vien cua lop: ");
-                scanf("%d", &soSinhVien);
-                nhapSinhVien(sinhVien, soSinhVien);
-                break;
-            case 2:
-                inSinhVien(sinhVien, soSinhVien);
-                break;
-            case 3:
-                sapXep(sinhVien, soSinhVien);
-                break;
-            case 4:
-                for (int i = 0; i < soSinhVien; i++)
-                {
-                    printf("Hoc luc cua sinh vien %d: ", i + 1);
-                    xepLoai(sinhVien, soSinhVien);
-                    printf("\n");
-                }
-                break;
-            case 5:
-                break;
-            case 0:
-                break;
-            default:
-                printf("Lua chon khong hop le!\n");
-                printf("Xin vui long nhap lai: ");
-        }
-        char choice;
-        printf("Ban co muon tiep tuc khong?(y/n)");
-        scanf("%c", &choice);
-        if(choice == 'n' || choice == 'N')
-        {
-            printf("Ban da roi chuong trinh!");
-            tieptuc = 0;
-        }
+    ST *stArr;
+    int numOfStudent = 0;
+    printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
+    printf("#   1. Them sinh vien.                               #\n");
+    printf("#   2. Cap nhat thong tin sinh vien.                 #\n");
+    printf("#   3. Xoa sinh vien.                                #\n");
+    printf("#   4. Tim kiem sinh vien theo ten.                  #\n");
+    printf("#   5. Sap xep sinh vien theo diem trung binh (GPA). #\n");
+    printf("#   6. Sap xep sinh vien theo ten.                   #\n");
+    printf("#   7. Hien thi danh sach sinh vien.                 #\n");
+    printf("#   0. Thoat.                                        #\n");
+    printf("******************************************************\n");
+    printf("Lua chon cua ban: ");
+    int choose;
+    scanf("%d", &choose);
+    switch(choose){
+        case 1:
+        addStudents(stArr, numOfStudent);
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 7:
+            break;
+        case 0:
+            return 0;
+        default:
+            printf("Lua chon khong nam trong MENU.");
+            return 0;
     }
-    return 0;
 }
