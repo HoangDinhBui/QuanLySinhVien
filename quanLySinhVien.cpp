@@ -45,7 +45,7 @@ void printStudent(ST *stArr, int numOfStudent)
 //    return stArr.id == inputID;
 //}
 //Func of update student's information
-void updateInfor(ST *stArr, int *numOfStudent, int ordinal)
+void updateInfor(ST *stArr, int ordinal)
 {
     ST student;
     printf("\nNhap ten sinh vien: ");
@@ -62,11 +62,26 @@ void updateInfor(ST *stArr, int *numOfStudent, int ordinal)
     stArr[ordinal - 1] = student;
     printf("Thong tin da duoc cap nhat!\n");
 }
+//Function of delete student
+void deleteStudent(ST *st, int ordinal, int *numOfStudent)
+{
+    if(ordinal < 0 || ordinal >= *numOfStudent)
+    {
+        printf("So thu tu sinh vien khong chinh xac!");
+        return;
+    }
+    for (int i = ordinal; i < *numOfStudent - 1; i++)
+    {
+        st[i] = st[i + 1];
+    }
+    (*numOfStudent)--;
+}
 int main()
 {
     ST *stArr = NULL;
      stArr = (ST*)malloc(0);
     int numOfStudent = 0;
+    int ordinal;
     printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
     printf("#   1. Them sinh vien.                               #\n");
     printf("#   2. Cap nhat thong tin sinh vien.                 #\n");
@@ -87,12 +102,14 @@ int main()
                 addStudent(stArr, &numOfStudent);
                 break;
             case 2:
-                int ordinal;
-                printf("Nhap MSSV can chinh sua: ");
-                scanf("%lld", &ordinal);
-                updateInfor(stArr, &numOfStudent, ordinal);
+                printf("Nhap so thu tu sinh vien can chinh sua: ");
+                scanf("%d", &ordinal);
+                updateInfor(stArr, ordinal);
                 break;
             case 3:
+                printf("Nhap so thu tu sinh vien muon xoa: ");
+                scanf("%d", &ordinal);
+                deleteStudent(stArr, ordinal, &numOfStudent);
                 break;
             case 4:
                 break;
