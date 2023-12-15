@@ -8,6 +8,7 @@ typedef struct Students{
     char dob[13];
     float gpa;
 }ST;
+//Func of add student
 void addStudent(ST *stArr, int *numOfStudent)
 {
     (*numOfStudent)++;
@@ -26,6 +27,16 @@ void addStudent(ST *stArr, int *numOfStudent)
     scanf("%f", &student.gpa);
     stArr[*numOfStudent-1] = student;
     printf("\nThem sinh vien thanh cong!\n");
+}
+//Func of print student list
+void printStudent(ST *st, int numOfStudent)
+{
+    printf("    Ten              MSSV         Ngay sinh         GPA\n");
+    for (int i = 0; i < numOfStudent; i++)
+    {
+        printf("%s                %lld     %s           %f", st[i].name, st[i].id, st[i].dob, st[i].gpa);
+        printf("\n");
+    }
 }
 int main()
 {
@@ -49,7 +60,7 @@ int main()
         scanf("%d", &choose);
         switch(choose){
             case 1:
-                addStudents(stArr, &numOfStudent);
+                addStudent(stArr, &numOfStudent);
                 break;
             case 2:
                 break;
@@ -62,9 +73,10 @@ int main()
             case 6:
                 break;
             case 7:
+                printStudent(stArr, numOfStudent);
                 break;
             case 0:
-                printf("Ban da thoat chuong trinh!");
+                printf("Ban da thoat chuong trinh!\n");
                 return 0;
             default:
                 printf("Lua chon khong nam trong MENU.");
