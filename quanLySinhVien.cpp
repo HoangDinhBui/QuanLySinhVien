@@ -75,15 +75,13 @@ void deleteStudent(ST *stArr, int ordinal, int *numOfStudent)
     (*numOfStudent)--;
 }
 //Function of find student by student's name
-void findStudent(ST *stArr, const char *inputName, int *numOfStudent)
+void findStudent(ST *stArr, const char *inputName, int &numOfStudent)
 {
-    for(int i = 0; i < *numOfStudent; i++)
+    for(int i = 0; i < numOfStudent; i++)
     {
         if(strcmp(stArr[i].name, inputName) == 0)
         {
-            printf("%s                %lld     %s           %f", 
-            stArr[i].name, stArr[i].id, stArr[i].dob, stArr[i].gpa);
-            printf("\n");
+            printStudent(stArr, numOfStudent);
         }
     }
 }
@@ -104,7 +102,7 @@ void sortStudentByGPA(ST *stArr, int *numOfStudent)
 const char* findLastName(const char* fullName)
 {
     const char* lastWhiteSpace = NULL;
-    for(const char* i = fullName; i != '\0'; i++)
+    for(const char* i = fullName; *i != '\0'; i++)
     {
         if (*i == '\n' || *i == '\0' || *i == ' ')
         {
@@ -139,7 +137,7 @@ void printMenu()
 {
     printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
     printf("======================================================\n");
-    printf("\t\t\tMENU");
+    printf("\t\t\tMENU\n");
     printf("-------------------------------------------------------\n");
     printf("||   1. Them sinh vien.                              ||\n");
     printf("||   2. Cap nhat thong tin sinh vien.                ||\n");
@@ -155,7 +153,7 @@ void printMenu()
 int main()
 {
     ST *stArr = NULL;
-     stArr = (ST*)malloc(0);
+    stArr = (ST*)malloc(0);
     int numOfStudent = 0;
     int ordinal;
     while(1)
@@ -190,7 +188,7 @@ int main()
                 printf("Nhap ten sinh vien can tim kiem: ");
                 while(getchar() != '\n');
                 fgets(inputName, sizeof(inputName), stdin);
-                findStudent(stArr, inputName ,&numOfStudent);
+                findStudent(stArr, inputName ,numOfStudent);
                 system("pause");
                 clearScreen();
                 break;
