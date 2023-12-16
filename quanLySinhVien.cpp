@@ -127,6 +127,11 @@ void sortStudentByName(ST *stArr, int *numOfStudent)
         }
     }
 }
+//Function of clear screen
+void clearScreen()
+{
+    system("cls");
+}
 int main()
 {
     ST *stArr = NULL;
@@ -151,16 +156,19 @@ int main()
         switch(choose){
             case 1:
                 addStudent(stArr, &numOfStudent);
+                clearScreen();
                 break;
             case 2:
                 printf("Nhap so thu tu sinh vien can chinh sua: ");
                 scanf("%d", &ordinal);
                 updateInfor(stArr, ordinal);
+                clearScreen();
                 break;
             case 3:
                 printf("Nhap so thu tu sinh vien muon xoa: ");
                 scanf("%d", &ordinal);
                 deleteStudent(stArr, ordinal, &numOfStudent);
+                clearScreen();
                 break;
             case 4:
                 char inputName[30];
@@ -168,16 +176,19 @@ int main()
                 while(getchar() != '\n');
                 fgets(inputName, sizeof(inputName), stdin);
                 findStudent(stArr, inputName ,&numOfStudent);
+                clearScreen();
                 break;
             case 5:
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByGPA(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
+                clearScreen();
                 break;
             case 6:
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByName(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
+                clearScreen();
                 break;
             case 7:
                 printStudent(stArr, numOfStudent);
