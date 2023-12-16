@@ -3,18 +3,34 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
+#include <windows.h>
 typedef struct Students{
     char name[30];
     long long id;
     char dob[13];
     float gpa;
 }ST;
+//Function of color MENU
+void SET_COLOR(int color)
+{
+	WORD wColor;
+     
+
+     HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+     CONSOLE_SCREEN_BUFFER_INFO csbi;
+     if(GetConsoleScreenBufferInfo(hStdOut, &csbi))
+     {
+          wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
+          SetConsoleTextAttribute(hStdOut, wColor);
+     }
+}
 //Func of add student
 void addStudent(ST *stArr, int *numOfStudent)
 {
     (*numOfStudent)++;
     stArr = (ST*)realloc(stArr, *numOfStudent * sizeof(ST));
     ST student;
+    SET_COLOR(3);
     printf("\nNhap ten sinh vien: ");
     while(getchar() != '\n');
     fgets(student.name, sizeof(student.name), stdin);
@@ -27,11 +43,13 @@ void addStudent(ST *stArr, int *numOfStudent)
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
     stArr[*numOfStudent-1] = student;
+    SET_COLOR(10);
     printf("\nThem sinh vien thanh cong!\n");
 }
 //Func of print student list
 void printStudent(ST *stArr, int numOfStudent)
 {
+    SET_COLOR(14);
 	printf("---------------------------------------------------------------------\n");
     printf("||       Ten         ||     MSSV    ||     Ngay sinh   ||    GPA   ||\n");
     printf("||-------------------||-------------||-----------------||----------||\n");
@@ -46,6 +64,7 @@ void printStudent(ST *stArr, int numOfStudent)
 void updateInfor(ST *stArr, int ordinal)
 {
     ST student;
+    SET_COLOR(3);
     printf("\nNhap ten sinh vien: ");
     while(getchar() != '\n');
     fgets(student.name, sizeof(student.name), stdin);
@@ -58,6 +77,7 @@ void updateInfor(ST *stArr, int ordinal)
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
     stArr[ordinal] = student;
+    SET_COLOR(10);
     printf("Thong tin da duoc cap nhat!\n");
 }
 //Function of delete student
@@ -65,6 +85,7 @@ void deleteStudent(ST *stArr, int ordinal, int *numOfStudent)
 {
     if(ordinal < 0 || ordinal > *numOfStudent)
     {
+        SET_COLOR(4);
         printf("So thu tu sinh vien khong chinh xac!");
         return;
     }
@@ -135,9 +156,13 @@ void clearScreen()
 //Funtion of print MENU
 void printMenu()
 {
+    SET_COLOR(10);
     printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
-    printf("======================================================\n");
+    SET_COLOR(9);
+    printf("=======================================================\n");
+    SET_COLOR(6);
     printf("\t\t\tMENU\n");
+    SET_COLOR(9);
     printf("-------------------------------------------------------\n");
     printf("||   1. Them sinh vien.                              ||\n");
     printf("||   2. Cap nhat thong tin sinh vien.                ||\n");
@@ -148,6 +173,7 @@ void printMenu()
     printf("||   7. Hien thi danh sach sinh vien.                ||\n");
     printf("||   0. Thoat.                                       ||\n");
     printf("-------------------------------------------------------\n");
+    SET_COLOR(10);
     printf("*******************************************************\n");
 }
 int main()
@@ -159,6 +185,7 @@ int main()
     while(1)
     {
         printMenu();
+        SET_COLOR(7);
         printf("Lua chon cua ban: ");
         int choose;
         scanf("%d", &choose);
@@ -169,6 +196,7 @@ int main()
                 clearScreen();
                 break;
             case 2:
+                SET_COLOR(3);
                 printf("Nhap so thu tu sinh vien can chinh sua: ");
                 scanf("%d", &ordinal);
                 updateInfor(stArr, ordinal);
@@ -176,15 +204,18 @@ int main()
                 clearScreen();
                 break;
             case 3:
+                SET_COLOR(3);
                 printf("Nhap so thu tu sinh vien muon xoa: ");
                 scanf("%d", &ordinal);
                 deleteStudent(stArr, ordinal, &numOfStudent);
+                SET_COLOR(10);
                 printf("Xoa sinh vien thanh cong!");
                 system("pause");
                 clearScreen();
                 break;
             case 4:
                 char inputName[30];
+                SET_COLOR(3);
                 printf("Nhap ten sinh vien can tim kiem: ");
                 while(getchar() != '\n');
                 fgets(inputName, sizeof(inputName), stdin);
@@ -193,6 +224,7 @@ int main()
                 clearScreen();
                 break;
             case 5:
+                SET_COLOR(10);
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByGPA(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
@@ -200,6 +232,7 @@ int main()
                 clearScreen();
                 break;
             case 6:
+                SET_COLOR(10);
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByName(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
@@ -212,11 +245,13 @@ int main()
                 clearScreen();
                 break;
             case 0:
+                SET_COLOR(4);
                 printf("Ban da thoat chuong trinh!\n");
                 system("pause");
                 return 0;
             default:
-                printf("Lua chon khong nam trong MENU.");
+                SET_COLOR(4);
+                printf("Lua chon khong nam trong MENU.\n");
                 system("pause");
                 return 0;
         }
