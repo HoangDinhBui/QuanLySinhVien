@@ -49,7 +49,7 @@ void addStudent(ST *stArr, int *numOfStudent)
 //Func of print student list
 void printStudent(ST *stArr, int numOfStudent)
 {
-    SET_COLOR(14);
+    SET_COLOR(5);
 	printf("---------------------------------------------------------------------\n");
     printf("||       Ten         ||     MSSV    ||     Ngay sinh   ||    GPA   ||\n");
     printf("||-------------------||-------------||-----------------||----------||\n");
