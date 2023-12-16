@@ -85,6 +85,20 @@ void findStudent(ST *stArr, const char *inputName, int *numOfStudent)
         }
     }
 }
+//Function of sort students by their GPA
+void sortStudentByGPA(ST *stArr, int *numOfStudent)
+{
+    for(int i = 0; i < *numOfStudent; i++)
+    {
+        if(stArr[i].gpa < stArr[i+1].gpa)
+        {
+            ST tmp = stArr[i];
+            stArr[i] = stArr[i+1];
+            stArr[i+1] = tmp;
+        }
+    }
+}
+
 int main()
 {
     ST *stArr = NULL;
@@ -128,6 +142,9 @@ int main()
                 findStudent(stArr, inputName ,&numOfStudent);
                 break;
             case 5:
+                printf("Danh sach sau khi sap xep: \n");
+                sortStudentByGPA(stArr, &numOfStudent);
+                printStudent(stArr, numOfStudent);
                 break;
             case 6:
                 break;
