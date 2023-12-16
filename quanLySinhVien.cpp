@@ -98,18 +98,31 @@ void sortStudentByGPA(ST *stArr, int *numOfStudent)
         }
     }
 }
+//Function of find the last name of student
+const char* findLastName(const char* fullName)
+{
+    const char* lastWhiteSpace = NULL;
+    for(const char* i = fullName; i != '\0'; i++)
+    {
+        if (*i == '\n' || *i == '\0' || *i == ' ')
+        {
+            lastWhiteSpace = i;
+        }
+    }
+    return ((lastWhiteSpace != NULL) ? lastWhiteSpace + 1 : fullName); 
+}
 //Function of sort student's list by their name
 void sortStudentByName(ST *stArr, int *numOfStudent)
 {
-    for(int i = 0; i < *numOfStudent; i++)
+    for(int i = 0; i < *numOfStudent - 1; i++)
     {
-        for(int j = 0; j < *numOfStudent-1-i; j++)
+        for(int j = i + 1; j < *numOfStudent; j++)
         {
-            if(strcmp(stArr[j].name, stArr[j + 1].name) > 0)
+            if(strcmp(findLastName(stArr[j].name), findLastName(stArr[j + 1].name)) < 0)
             {
-                ST tmp = stArr[j];
-                stArr[j] = stArr[j + 1];
-                stArr[j + 1] = tmp;
+                ST tmp = stArr[i];
+                stArr[i] = stArr[j];
+                stArr[j] = tmp;
             }
         }
     }
@@ -162,7 +175,7 @@ int main()
                 printStudent(stArr, numOfStudent);
                 break;
             case 6:
-                printf("Danh sach sau kh    i sap xep: \n");
+                printf("Danh sach sau khi sap xep: \n");
                 sortStudentByName(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
                 break;
