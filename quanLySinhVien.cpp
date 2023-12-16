@@ -98,7 +98,22 @@ void sortStudentByGPA(ST *stArr, int *numOfStudent)
         }
     }
 }
-
+//Function of sort student's list by their name
+void sortStudentByName(ST *stArr, int *numOfStudent)
+{
+    for(int i = 0; i < *numOfStudent; i++)
+    {
+        for(int j = 0; j < *numOfStudent-1-i; j++)
+        {
+            if(strcmp(stArr[j].name, stArr[j + 1].name) > 0)
+            {
+                ST tmp = stArr[j];
+                stArr[j] = stArr[j + 1];
+                stArr[j + 1] = tmp;
+            }
+        }
+    }
+}
 int main()
 {
     ST *stArr = NULL;
@@ -147,6 +162,9 @@ int main()
                 printStudent(stArr, numOfStudent);
                 break;
             case 6:
+                printf("Danh sach sau kh    i sap xep: \n");
+                sortStudentByName(stArr, &numOfStudent);
+                printStudent(stArr, numOfStudent);
                 break;
             case 7:
                 printStudent(stArr, numOfStudent);
