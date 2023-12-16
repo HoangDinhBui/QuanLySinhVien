@@ -32,12 +32,14 @@ void addStudent(ST *stArr, int *numOfStudent)
 //Func of print student list
 void printStudent(ST *stArr, int numOfStudent)
 {
-    printf("    Ten              MSSV         Ngay sinh         GPA\n");
+	printf("---------------------------------------------------------------------\n");
+    printf("||       Ten         ||     MSSV    ||     Ngay sinh   ||    GPA   ||\n");
+    printf("||-------------------||-------------||-----------------||----------||\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("%s                %lld     %s           %f",
+        printf("|| %s              	     ||%lld   ||   %s    ||    %0.2f  ||\n",
         stArr[i].name, stArr[i].id, stArr[i].dob, stArr[i].gpa);
-        printf("\n");
+        printf("||-------------------||-------------||-----------------||----------||\n");
     }
 }
 //Func of update student's information
@@ -132,42 +134,55 @@ void clearScreen()
 {
     system("cls");
 }
+//Funtion of print MENU
+void printMenu()
+{
+    printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
+    printf("======================================================\n");
+    printf("\t\t\tMENU");
+    printf("-------------------------------------------------------\n");
+    printf("||   1. Them sinh vien.                              ||\n");
+    printf("||   2. Cap nhat thong tin sinh vien.                ||\n");
+    printf("||   3. Xoa sinh vien.                               ||\n");
+    printf("||   4. Tim kiem sinh vien theo ten.                 ||\n");
+    printf("||   5. Sap xep sinh vien theo diem trung binh (GPA).||\n");
+    printf("||   6. Sap xep sinh vien theo ten.                  ||\n");
+    printf("||   7. Hien thi danh sach sinh vien.                ||\n");
+    printf("||   0. Thoat.                                       ||\n");
+    printf("-------------------------------------------------------\n");
+    printf("*******************************************************\n");
+}
 int main()
 {
     ST *stArr = NULL;
      stArr = (ST*)malloc(0);
     int numOfStudent = 0;
     int ordinal;
-    printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
-    printf("#   1. Them sinh vien.                               #\n");
-    printf("#   2. Cap nhat thong tin sinh vien.                 #\n");
-    printf("#   3. Xoa sinh vien.                                #\n");
-    printf("#   4. Tim kiem sinh vien theo ten.                  #\n");
-    printf("#   5. Sap xep sinh vien theo diem trung binh (GPA). #\n");
-    printf("#   6. Sap xep sinh vien theo ten.                   #\n");
-    printf("#   7. Hien thi danh sach sinh vien.                 #\n");
-    printf("#   0. Thoat.                                        #\n");
-    printf("******************************************************\n");
     while(1)
     {
+        printMenu();
         printf("Lua chon cua ban: ");
         int choose;
         scanf("%d", &choose);
         switch(choose){
             case 1:
                 addStudent(stArr, &numOfStudent);
+                system("pause");
                 clearScreen();
                 break;
             case 2:
                 printf("Nhap so thu tu sinh vien can chinh sua: ");
                 scanf("%d", &ordinal);
                 updateInfor(stArr, ordinal);
+                system("pause");
                 clearScreen();
                 break;
             case 3:
                 printf("Nhap so thu tu sinh vien muon xoa: ");
                 scanf("%d", &ordinal);
                 deleteStudent(stArr, ordinal, &numOfStudent);
+                printf("Xoa sinh vien thanh cong!");
+                system("pause");
                 clearScreen();
                 break;
             case 4:
@@ -176,28 +191,35 @@ int main()
                 while(getchar() != '\n');
                 fgets(inputName, sizeof(inputName), stdin);
                 findStudent(stArr, inputName ,&numOfStudent);
+                system("pause");
                 clearScreen();
                 break;
             case 5:
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByGPA(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
+                system("pause");
                 clearScreen();
                 break;
             case 6:
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByName(stArr, &numOfStudent);
                 printStudent(stArr, numOfStudent);
+                system("pause");
                 clearScreen();
                 break;
             case 7:
                 printStudent(stArr, numOfStudent);
+                system("pause");
+                clearScreen();
                 break;
             case 0:
                 printf("Ban da thoat chuong trinh!\n");
+                system("pause");
                 return 0;
             default:
                 printf("Lua chon khong nam trong MENU.");
+                system("pause");
                 return 0;
         }
     }
