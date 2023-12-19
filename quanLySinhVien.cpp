@@ -7,7 +7,7 @@
 typedef struct Students{
     char name[30];
     long long id;
-    char dob[13];
+    int date, month, year;
     float gpa;
 }ST;
 //Function of color MENU
@@ -24,6 +24,32 @@ void SET_COLOR(int color)
           SetConsoleTextAttribute(hStdOut, wColor);
      }
 }
+//Func of check student's date of birth
+bool checkDob(const ST *student)
+{
+    if(student->date <= 0 || student->month <= 0 || student->year <= 0)
+    {
+        return false;
+    }
+    if(student->month == 4 || student->month == 6 || student->month == 9 || student->month == 11)
+    {
+        if (student->date > 30)
+            return false;
+    }
+    else if(student->month == 2)
+    {
+        if((student->year % 4 == 0 && student->year % 100 != 0) 
+        && (student->date > 29 || student->date <= 0))
+            return false;
+        else if(student->date > 28 || student->date <= 0)
+            return false;
+    }
+    else if(student->month > 12 || student->date > 31)
+    {
+        return false;
+    }
+    return true;
+}
 //Func of add student
 void addStudent(ST *stArr, int *numOfStudent)
 {
@@ -37,8 +63,13 @@ void addStudent(ST *stArr, int *numOfStudent)
     printf("\nNhap ma so sinh vien: ");
     scanf("%lld", &student.id);
     printf("\nNhap ngay thang nam sinh: ");
-    while(getchar() != '\n');
-    scanf("%s", student.dob);
+    scanf("%d%d%d", &student.date, &student.month, &student.year);
+    if(!checkDob(&student))
+    {
+        SET_COLOR(4);
+        printf("Ngay thang hoac nam sinh khong hop le!");
+        return;
+    }
     printf("\nNhap diem GPA: ");
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
@@ -55,8 +86,8 @@ void printStudent(ST *stArr, int numOfStudent)
     printf("||-------------------||-------------||-----------------||----------||\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("|| %s              	     ||%lld   ||   %s    ||    %0.2f  ||\n",
-        stArr[i].name, stArr[i].id, stArr[i].dob, stArr[i].gpa);
+        printf("|| %s              	     ||%lld   || %d%d%d  ||    %0.2f  ||\n",
+        stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
         printf("||-------------------||-------------||-----------------||----------||\n");
     }
 }
@@ -71,8 +102,13 @@ void updateInfor(ST *stArr, int ordinal)
     printf("\nNhap ma so sinh vien: ");
     scanf("%lld", &student.id);
     printf("\nNhap ngay thang nam sinh: ");
-    while(getchar() != '\n');
-    scanf("%s", student.dob);
+    scanf("%d%d%d", student.date, student.month, student.year);
+    if(!checkDob(&student))
+    {
+        SET_COLOR(4);
+        printf("Ngay thang hoac nam sinh khong hop le!");
+        return;
+    }
     printf("\nNhap diem GPA: ");
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
@@ -109,13 +145,16 @@ void findStudent(ST *stArr, const char *inputName, int &numOfStudent)
 //Function of sort students by their GPA
 void sortStudentByGPA(ST *stArr, int *numOfStudent)
 {
-    for(int i = 0; i < *numOfStudent; i++)
+    for(int i = 0; i < *numOfStudent - 1; i++)
     {
-        if(stArr[i].gpa < stArr[i+1].gpa)
+        for(int j = i + 1; j < *numOfStudent; j++)
         {
-            ST tmp = stArr[i];
-            stArr[i] = stArr[i+1];
-            stArr[i+1] = tmp;
+            if(stArr[i].gpa < stArr[j].gpa)
+            {
+                ST tmp = stArr[i];
+                stArr[i] = stArr[j];
+                stArr[j] = tmp;
+            }
         }
     }
 }
