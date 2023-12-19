@@ -119,7 +119,7 @@ void printStudent(ST *stArr, int numOfStudent)
     printf("||-------------------||-------------||-----------------||----------||\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("|| %s              	     ||%lld   || %d%d%d  ||    %0.2f  ||\n",
+        printf("|| %s              	     ||%lld   ||   %d/%d/%d    ||    %0.2f  ||\n",
         stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
         printf("||-------------------||-------------||-----------------||----------||\n");
     }
@@ -141,7 +141,7 @@ void updateInfor(ST *stArr, int ordinal)
         return;
     }
     printf("\nNhap ngay thang nam sinh: ");
-    scanf("%d%d%d", student.date, student.month, student.year);
+    scanf("%d%d%d", &student.date, &student.month, &student.year);
     if(!checkDob(&student))
     {
         SET_COLOR(4);
@@ -280,6 +280,13 @@ int main()
                 clearScreen();
                 break;
             case 2:
+                if(numOfStudent == 0)
+                {
+                    SET_COLOR(4);
+                    printf("Khong co sinh vien trong danh sach!\n");
+                    system("pause");
+                    break;
+                }
                 SET_COLOR(3);
                 printf("Nhap so thu tu sinh vien can chinh sua: ");
                 scanf("%d", &ordinal);
@@ -288,6 +295,13 @@ int main()
                 clearScreen();
                 break;
             case 3:
+                if(numOfStudent == 0)
+                {
+                    SET_COLOR(4);
+                    printf("Khong co sinh vien trong danh sach!\n");
+                    system("pause");
+                    break;
+                }
                 SET_COLOR(3);
                 printf("Nhap so thu tu sinh vien muon xoa: ");
                 scanf("%d", &ordinal);
@@ -298,6 +312,13 @@ int main()
                 clearScreen();
                 break;
             case 4:
+                if(numOfStudent == 0)
+                {
+                    SET_COLOR(4);
+                    printf("Khong co sinh vien trong danh sach!\n");
+                    system("pause");
+                    break;
+                }
                 char inputName[30];
                 SET_COLOR(3);
                 printf("Nhap ten sinh vien can tim kiem: ");
@@ -308,6 +329,13 @@ int main()
                 clearScreen();
                 break;
             case 5:
+                if(numOfStudent == 0)
+                {
+                    SET_COLOR(4);
+                    printf("Khong co sinh vien trong danh sach!\n");
+                    system("pause");
+                    break;
+                }
                 SET_COLOR(10);
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByGPA(stArr, &numOfStudent);
@@ -316,6 +344,13 @@ int main()
                 clearScreen();
                 break;
             case 6:
+                if(numOfStudent == 0)
+                {
+                    SET_COLOR(4);
+                    printf("Khong co sinh vien trong danh sach!\n");
+                    system("pause");
+                    break;
+                }
                 SET_COLOR(10);
                 printf("Danh sach sau khi sap xep: \n");
                 sortStudentByName(stArr, &numOfStudent);
@@ -324,6 +359,13 @@ int main()
                 clearScreen();
                 break;
             case 7:
+                if(numOfStudent == 0)
+                {
+                    SET_COLOR(4);
+                    printf("Khong co sinh vien trong danh sach!\n");
+                    system("pause");
+                    break;
+                }
                 printStudent(stArr, numOfStudent);
                 system("pause");
                 clearScreen();
