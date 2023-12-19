@@ -50,6 +50,20 @@ bool checkDob(const ST *student)
     }
     return true;
 }
+//Func of check numbers of student's id
+bool checkId(const ST *student)
+{
+    long long idCopy = student->id;
+    int count = 0;
+    while(idCopy > 0)
+    {
+        idCopy = idCopy / 10;
+        count++;
+    }
+    if(count != 10)
+        return false;
+    return true;
+}
 //Func of add student
 void addStudent(ST *stArr, int *numOfStudent)
 {
@@ -62,12 +76,18 @@ void addStudent(ST *stArr, int *numOfStudent)
     fgets(student.name, sizeof(student.name), stdin);
     printf("\nNhap ma so sinh vien: ");
     scanf("%lld", &student.id);
+    if(!checkId(&student))
+    {
+        SET_COLOR(4);
+        printf("Ma so sinh vien khong hop le!\n");
+        return;
+    }
     printf("\nNhap ngay thang nam sinh: ");
     scanf("%d%d%d", &student.date, &student.month, &student.year);
     if(!checkDob(&student))
     {
         SET_COLOR(4);
-        printf("Ngay thang hoac nam sinh khong hop le!");
+        printf("Ngay thang hoac nam sinh khong hop le!\n");
         return;
     }
     printf("\nNhap diem GPA: ");
@@ -101,12 +121,18 @@ void updateInfor(ST *stArr, int ordinal)
     fgets(student.name, sizeof(student.name), stdin);
     printf("\nNhap ma so sinh vien: ");
     scanf("%lld", &student.id);
+    if(!checkId(&student))
+    {
+        SET_COLOR(4);
+        printf("Ma so sinh vien khong hop le!\n");
+        return;
+    }
     printf("\nNhap ngay thang nam sinh: ");
     scanf("%d%d%d", student.date, student.month, student.year);
     if(!checkDob(&student))
     {
         SET_COLOR(4);
-        printf("Ngay thang hoac nam sinh khong hop le!");
+        printf("Ngay thang hoac nam sinh khong hop le!\n");
         return;
     }
     printf("\nNhap diem GPA: ");
