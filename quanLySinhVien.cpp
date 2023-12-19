@@ -64,6 +64,13 @@ bool checkId(const ST *student)
         return false;
     return true;
 }
+//Func of check possible GPA
+bool checkGpa(ST *student)
+{
+    if(student->gpa < 0 || student->gpa > 4)
+        return false;
+    return true;
+}
 //Func of add student
 void addStudent(ST *stArr, int *numOfStudent)
 {
@@ -93,6 +100,12 @@ void addStudent(ST *stArr, int *numOfStudent)
     printf("\nNhap diem GPA: ");
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
+    if(!checkGpa(&student))
+    {
+        SET_COLOR(4);
+        printf("GPA khong hop le!\n");
+        return;
+    }
     stArr[*numOfStudent-1] = student;
     SET_COLOR(10);
     printf("\nThem sinh vien thanh cong!\n");
@@ -138,6 +151,12 @@ void updateInfor(ST *stArr, int ordinal)
     printf("\nNhap diem GPA: ");
     while(getchar() != '\n');
     scanf("%f", &student.gpa);
+    if(!checkGpa(&student))
+    {
+        SET_COLOR(4);
+        printf("GPA khong hop le!\n");
+        return;
+    }
     stArr[ordinal] = student;
     SET_COLOR(10);
     printf("Thong tin da duoc cap nhat!\n");
