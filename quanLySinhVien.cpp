@@ -116,12 +116,12 @@ void printStudent(ST *stArr, int numOfStudent)
     SET_COLOR(5);
 	printf("---------------------------------------------------------------------\n");
     printf("||       Ten         ||     MSSV    ||     Ngay sinh   ||    GPA   ||\n");
-    printf("||-------------------||-------------||-----------------||----------||\n");
+    printf("---------------------------------------------------------------------\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("|| %s              	     ||%lld   ||   %d/%d/%d    ||    %0.2f  ||\n",
+        printf("||%s\t||\t%lld\t||\t%d/%d/%d\t||\t%0.2f\t||\n",
         stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
-        printf("||-------------------||-------------||-----------------||----------||\n");
+        printf("---------------------------------------------------------------------\n");
     }
 }
 //Func of update student's information
