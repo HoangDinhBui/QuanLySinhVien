@@ -119,7 +119,7 @@ void printStudent(ST *stArr, int numOfStudent)
     printf("---------------------------------------------------------------------\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("||%s\t||\t%lld\t||\t%d/%d/%d\t||\t%0.2f\t||\n",
+        printf("||%s\t\t\t||%lld\t||\t%d/%d/%d\t||%0.2f\t||\n",
         stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
         printf("---------------------------------------------------------------------\n");
     }
