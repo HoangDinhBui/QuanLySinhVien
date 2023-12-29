@@ -80,7 +80,13 @@ void addStudent(ST *stArr, int *numOfStudent)
     SET_COLOR(3);
     printf("\nNhap ten sinh vien: ");
     while(getchar() != '\n');
+    // Read the name and remove the newline character
     fgets(student.name, sizeof(student.name), stdin);
+    size_t len = strlen(student.name);
+    if (len > 0 && student.name[len - 1] == '\n')
+    {
+        student.name[len - 1] = '\0'; // Remove the newline character
+    }
     printf("\nNhap ma so sinh vien: ");
     scanf("%lld", &student.id);
     if(!checkId(&student))
@@ -114,13 +120,13 @@ void addStudent(ST *stArr, int *numOfStudent)
 void printStudent(ST *stArr, int numOfStudent)
 {
     SET_COLOR(5);
-	printf("---------------------------------------------------------------------\n");
-    printf("||       Ten         ||     MSSV    ||     Ngay sinh   ||    GPA   ||\n");
+    printf("---------------------------------------------------------------------\n");
+    printf("||      Ten                  ||   MSSV     ||   Ngay sinh   ||   GPA   ||\n");
     printf("---------------------------------------------------------------------\n");
     for (int i = 0; i < numOfStudent; i++)
     {
-        printf("||%s\t\t\t||%lld\t||\t%d/%d/%d\t||%0.2f\t||\n",
-        stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
+        printf("|| %-25s || %-10lld ||  %02d/%02d/%04d   ||  %0.2f   ||\n",
+               stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
         printf("---------------------------------------------------------------------\n");
     }
 }
