@@ -1,26 +1,30 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
 #include <windows.h>
 #include <iomanip>
+#include <io.h>
+#include <fcntl.h>
 
 using namespace std;
 
 struct Students {
-    string name;
+    wstring name;
     long long id;
     int date, month, year;
     float gpa;
 };
 
+void setVietnameseTextMode() {
+    _setmode(_fileno(stdin), _O_U16TEXT);
+    _setmode(_fileno(stdout), _O_U16TEXT);
+}
+
 // Function of color MENU
 void SET_COLOR(int color) {
-    WORD wColor;
-
     HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-        wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
+        WORD wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
         SetConsoleTextAttribute(hStdOut, wColor);
     }
 }
@@ -66,58 +70,63 @@ bool checkGpa(const Students& student) {
 
 // Func of add student
 void addStudent(Students*& stArr, int& numOfStudent) {
+    setVietnameseTextMode();
+
     numOfStudent++;
     Students* newStArr = new Students[numOfStudent];
-    // Sao chép dữ liệu từ stArr sang newStArr
-    std::copy(stArr, stArr + numOfStudent, newStArr);
-    // Giải phóng bộ nhớ của stArr
+    // Copy data from stArr to newStArr
+    std::copy(stArr, stArr + numOfStudent - 1, newStArr);
+    // Release memory of stArr
     delete[] stArr;
-    // Gán stArr trỏ đến newStArr
+    // stArr points to newStArr
     stArr = newStArr;
+
     Students student;
     SET_COLOR(3);
-    cout << "\nNhap ten sinh vien: ";
-    cin.ignore();
-    getline(cin, student.name);
+    wcout << L"\nNhập tên sinh viên: ";
+    wcin.ignore();
+    getline(wcin, student.name);
 
-    cout << "\nNhap ma so sinh vien: ";
-    cin >> student.id;
+    wcout << L"\nNhập mã số sinh viên: ";
+    wcin >> student.id;
     if (!checkId(student)) {
         SET_COLOR(4);
-        cout << "Ma so sinh vien khong hop le!\n";
+        wcout << L"Mã số sinh viên không hợp lệ!\n";
         return;
     }
 
-    cout << "\nNhap ngay thang nam sinh: ";
-    cin >> student.date >> student.month >> student.year;
+    wcout << L"\nNhập ngày tháng năm sinh: ";
+    wcin >> student.date >> student.month >> student.year;
     if (!checkDob(student)) {
         SET_COLOR(4);
-        cout << "Ngay thang hoac nam sinh khong hop le!\n";
+        wcout << L"Ngày tháng hoặc năm sinh không hợp lệ!\n";
         return;
     }
 
-    cout << "\nNhap diem GPA: ";
-    cin >> student.gpa;
+    wcout << L"\nNhập điểm GPA: ";
+    wcin >> student.gpa;
     if (!checkGpa(student)) {
         SET_COLOR(4);
-        cout << "GPA khong hop le!\n";
+        wcout << L"GPA Không hợp lệ!\n";
         return;
     }
 
     stArr[numOfStudent - 1] = student;
     SET_COLOR(10);
-    cout << "\nThem sinh vien thanh cong!\n";
+    wcout << L"\nThêm sinh viên thành công!\n";
 }
 
 // Func of print student list
 void printStudent(const Students* stArr, int numOfStudent) {
+    setVietnameseTextMode();
+
     SET_COLOR(5);
-    cout << "---------------------------------------------------------------------\n";
-    cout << "||      Ten                  ||   MSSV     ||   Ngay sinh   ||   GPA   ||\n";
-    cout << "---------------------------------------------------------------------\n";
+    wcout << L"---------------------------------------------------------------------\n";
+    wcout << L"||      Tên                  ||   MSSV     ||   Ngày sinh   ||   GPA   ||\n";
+    wcout << L"---------------------------------------------------------------------\n";
     for (int i = 0; i < numOfStudent; i++) {
-        cout << "|| " << setw(25) << left << stArr[i].name << " || " << setw(10) << stArr[i].id << " ||  " << setfill('0') << setw(2) << stArr[i].date << "/" << setw(2) << stArr[i].month << "/" << setw(4) << stArr[i].year << "   ||  " << fixed << setprecision(2) << stArr[i].gpa << "   ||\n";
-        cout << "---------------------------------------------------------------------\n";
+        wcout << L"|| " << setw(25) << left << stArr[i].name << L" || " << setw(10) << stArr[i].id << L" ||  " << setfill(L'0') << setw(2) << stArr[i].date << L"/" << setw(2) << stArr[i].month << L"/" << setw(4) << stArr[i].year << L"   ||  " << fixed << setprecision(2) << stArr[i].gpa << L"   ||\n";
+        wcout << L"---------------------------------------------------------------------\n";
     }
 }
 
@@ -125,44 +134,46 @@ void printStudent(const Students* stArr, int numOfStudent) {
 void updateInfor(Students* stArr, int ordinal) {
     Students student;
     SET_COLOR(3);
-    cout << "\nNhap ten sinh vien: ";
-    cin.ignore();
-    getline(cin, student.name);
+    wcout << L"\nNhập tên sinh viên: ";
+    wcin.ignore();
+    getline(wcin, student.name);
 
-    cout << "\nNhap ma so sinh vien: ";
-    cin >> student.id;
+    wcout << L"\nNhập mã số sinh viên: ";
+    wcin >> student.id;
     if (!checkId(student)) {
         SET_COLOR(4);
-        cout << "Ma so sinh vien khong hop le!\n";
+        wcout << L"Mã số sinh viên không hợp lệ!\n";
         return;
     }
 
-    cout << "\nNhap ngay thang nam sinh: ";
-    cin >> student.date >> student.month >> student.year;
+    wcout << L"\nNhập ngày tháng năm sinh: ";
+    wcin >> student.date >> student.month >> student.year;
     if (!checkDob(student)) {
         SET_COLOR(4);
-        cout << "Ngay thang hoac nam sinh khong hop le!\n";
+        wcout << L"Ngày tháng hoặc năm sinh không hợp lệ!\n";
         return;
     }
 
-    cout << "\nNhap diem GPA: ";
-    cin >> student.gpa;
+    wcout << L"\nNhập điểm GPA: ";
+    wcin >> student.gpa;
     if (!checkGpa(student)) {
         SET_COLOR(4);
-        cout << "GPA khong hop le!\n";
+        wcout << L"GPA không hợp lệ!\n";
         return;
     }
 
     stArr[ordinal] = student;
     SET_COLOR(10);
-    cout << "Thong tin da duoc cap nhat!\n";
+    wcout << L"Thông tin đã được cập nhật!\n";
 }
 
 // Function of delete student
 void deleteStudent(Students* stArr, int ordinal, int& numOfStudent) {
+    setVietnameseTextMode();
+
     if (ordinal < 0 || ordinal >= numOfStudent) {
         SET_COLOR(4);
-        cout << "So thu tu sinh vien khong chinh xac!";
+        wcout << L"Số thứ tự sinh viên không chính xác!";
         return;
     }
     for (int i = ordinal; i < numOfStudent - 1; i++) {
@@ -172,7 +183,9 @@ void deleteStudent(Students* stArr, int ordinal, int& numOfStudent) {
 }
 
 // Function of find student by student's name
-void findStudent(const Students* stArr, const string& inputName, int numOfStudent) {
+void findStudent(const Students* stArr, const wstring& inputName, int numOfStudent) {
+    setVietnameseTextMode();
+
     bool found = false;
     for (int i = 0; i < numOfStudent; i++) {
         if (stArr[i].name == inputName) {
@@ -183,7 +196,7 @@ void findStudent(const Students* stArr, const string& inputName, int numOfStuden
     }
     if (!found) {
         SET_COLOR(4);
-        cout << "Khong tim thay sinh vien co ten: " << inputName << endl;
+        wcout << L"Không tìm thấy sinh viên!" << endl;
     }
 }
 
@@ -201,9 +214,9 @@ void sortStudentByGPA(Students* stArr, int numOfStudent) {
 }
 
 // Function of find the last name of student
-const string findLastName(const string& fullName) {
-    size_t lastWhiteSpace = fullName.find_last_of(" ");
-    return ((lastWhiteSpace != string::npos) ? fullName.substr(lastWhiteSpace + 1) : fullName);
+const wstring findLastName(const wstring& fullName) {
+    size_t lastWhiteSpace = fullName.find_last_of(L" ");
+    return ((lastWhiteSpace != wstring::npos) ? fullName.substr(lastWhiteSpace + 1) : fullName);
 }
 
 // Function of sort student's list by their name
@@ -226,40 +239,44 @@ void clearScreen() {
 
 // Function of print MENU
 void printMenu() {
+    setVietnameseTextMode();
+
     SET_COLOR(10);
-    cout << "************CHUONG TRINH QUAN LY SINH VIEN************\n";
+    wcout << L"************CHƯƠNG TRÌNH QUẢN LÝ SINH VIÊN************\n";
     SET_COLOR(9);
-    cout << "=======================================================\n";
+    wcout << L"=======================================================\n";
     SET_COLOR(6);
-    cout << "\t\t\tMENU\n";
+    wcout << L"\t\t\tMENU\n";
     SET_COLOR(9);
-    cout << "-------------------------------------------------------\n";
-    cout << "||   1. Them sinh vien.                              ||\n";
-    cout << "||   2. Cap nhat thong tin sinh vien.                ||\n";
-    cout << "||   3. Xoa sinh vien.                               ||\n";
-    cout << "||   4. Tim kiem sinh vien theo ten.                 ||\n";
-    cout << "||   5. Sap xep sinh vien theo diem trung binh (GPA).||\n";
-    cout << "||   6. Sap xep sinh vien theo ten.                  ||\n";
-    cout << "||   7. Hien thi danh sach sinh vien.                ||\n";
-    cout << "||   0. Thoat.                                       ||\n";
-    cout << "-------------------------------------------------------\n";
+    wcout << L"-------------------------------------------------------\n";
+    wcout << L"||   1. Thêm sinh viên.                              ||\n";
+    wcout << L"||   2. Cập nhật thông tin sinh viên.                ||\n";
+    wcout << L"||   3. Xóa sinh viên.                               ||\n";
+    wcout << L"||   4. Tìm kiếm sinh viên theo tên.                 ||\n";
+    wcout << L"||   5. Sắp xếp sinh viên theo điểm trung bình (GPA).||\n";
+    wcout << L"||   6. Sắp xếp sinh viên theo tên.                  ||\n";
+    wcout << L"||   7. Hiển thị danh sách sinh viên.                ||\n";
+    wcout << L"||   0. Thoát.                                       ||\n";
+    wcout << L"-------------------------------------------------------\n";
     SET_COLOR(10);
-    cout << "*******************************************************\n";
+    wcout << L"*******************************************************\n";
 }
 
 int main() {
+    setVietnameseTextMode();
+
     Students* stArr = nullptr;
     stArr = new Students[0];
     int numOfStudent = 0;
     int ordinal;
-    string inputName;  // Di chuyển khai báo lên đây
+    wstring inputName;  // Move the declaration up here
 
     while (1) {
         printMenu();
         SET_COLOR(7);
-        cout << "Lua chon cua ban: ";
+        wcout << L"Lựa chọn của bạn: ";
         int choose;
-        cin >> choose;
+        wcin >> choose;
 
         switch (choose) {
             case 1:
@@ -270,13 +287,13 @@ int main() {
             case 2:
                 if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    cout << "Khong co sinh vien trong danh sach!\n";
+                    wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(3);
-                cout << "Nhap so thu tu sinh vien can chinh sua: ";
-                cin >> ordinal;
+                wcout << L"Nhập số thứ tự sinh viên cần chỉnh sửa thông tin: ";
+                wcin >> ordinal;
                 updateInfor(stArr, ordinal - 1);
                 system("pause");
                 clearScreen();
@@ -284,30 +301,30 @@ int main() {
             case 3:
                 if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    cout << "Khong co sinh vien trong danh sach!\n";
+                    wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(3);
-                cout << "Nhap so thu tu sinh vien muon xoa: ";
-                cin >> ordinal;
+                wcout << L"Nhập số thứ tự sinh viên cần xóa: ";
+                wcin >> ordinal;
                 deleteStudent(stArr, ordinal - 1, numOfStudent);
                 SET_COLOR(10);
-                cout << "Xoa sinh vien thanh cong!";
+                wcout << L"Xóa sinh viên thành công!";
                 system("pause");
                 clearScreen();
                 break;
             case 4:
                 if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    cout << "Khong co sinh vien trong danh sach!\n";
+                    wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(3);
-                cout << "Nhap ten sinh vien can tim kiem: ";
-                cin.ignore();
-                getline(cin, inputName);
+                wcout << L"Nhập tên sinh viên cần tìm kiếm: ";
+                wcin.ignore();
+                getline(wcin, inputName);
                 findStudent(stArr, inputName, numOfStudent);
                 system("pause");
                 clearScreen();
@@ -315,12 +332,12 @@ int main() {
             case 5:
                 if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    cout << "Khong co sinh vien trong danh sach!\n";
+                    wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(10);
-                cout << "Danh sach sau khi sap xep: \n";
+                wcout << L"Danh sách sau khi sắp xếp: \n";
                 sortStudentByGPA(stArr, numOfStudent);
                 printStudent(stArr, numOfStudent);
                 system("pause");
@@ -329,12 +346,12 @@ int main() {
             case 6:
                 if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    cout << "Khong co sinh vien trong danh sach!\n";
+                    wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(10);
-                cout << "Danh sach sau khi sap xep: \n";
+                wcout << L"Danh sách sau khi sắp xếp: \n";
                 sortStudentByName(stArr, numOfStudent);
                 printStudent(stArr, numOfStudent);
                 system("pause");
@@ -343,7 +360,7 @@ int main() {
             case 7:
                 if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    cout << "Khong co sinh vien trong danh sach!\n";
+                    wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
                     break;
                 }
@@ -353,15 +370,15 @@ int main() {
                 break;
             case 0:
                 SET_COLOR(4);
-                cout << "Ban da thoat chuong trinh!\n";
+                wcout << L"Bạn đã thoát chương trình!\n";
                 system("pause");
-                delete[] stArr; // Giải phóng bộ nhớ trước khi thoát
+                delete[] stArr; // Release memory before exit
                 return 0;
             default:
                 SET_COLOR(4);
-                cout << "Lua chon khong nam trong MENU.\n";
+                wcout << L"Lựa chọn không nằm trong MENU.\n";
                 system("pause");
-                delete[] stArr; // Giải phóng bộ nhớ trước khi thoát
+                delete[] stArr; // Release memory before exit
                 return 0;
         }
     }
