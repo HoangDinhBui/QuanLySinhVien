@@ -1,374 +1,349 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <stdbool.h>
+#include <iostream>
+#include <string>
+#include <cstdlib>
 #include <windows.h>
-typedef struct Students{
-    char name[30];
+#include <iomanip>
+
+using namespace std;
+
+struct Students {
+    string name;
     long long id;
     int date, month, year;
     float gpa;
-}ST;
-//Function of color MENU
-void SET_COLOR(int color)
-{
-	WORD wColor;
-     
+};
 
-     HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-     CONSOLE_SCREEN_BUFFER_INFO csbi;
-     if(GetConsoleScreenBufferInfo(hStdOut, &csbi))
-     {
-          wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
-          SetConsoleTextAttribute(hStdOut, wColor);
-     }
+// Function of color MENU
+void SET_COLOR(int color) {
+    WORD wColor;
+
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+        wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
+        SetConsoleTextAttribute(hStdOut, wColor);
+    }
 }
-//Func of check student's date of birth
-bool checkDob(const ST *student)
-{
-    if(student->date <= 0 || student->month <= 0 || student->year <= 0)
-    {
+
+// Func of check student's date of birth
+bool checkDob(const Students& student) {
+    if (student.date <= 0 || student.month <= 0 || student.year <= 0) {
         return false;
     }
-    if(student->month == 4 || student->month == 6 || student->month == 9 || student->month == 11)
-    {
-        if (student->date > 30)
+    if (student.month == 4 || student.month == 6 || student.month == 9 || student.month == 11) {
+        if (student.date > 30)
             return false;
-    }
-    else if(student->month == 2)
-    {
-        if((student->year % 4 == 0 && student->year % 100 != 0) 
-        && (student->date > 29 || student->date <= 0))
+    } else if (student.month == 2) {
+        if ((student.year % 4 == 0 && student.year % 100 != 0) && (student.date > 29 || student.date <= 0))
             return false;
-        else if(student->date > 28 || student->date <= 0)
+        else if (student.date > 28 || student.date <= 0)
             return false;
-    }
-    else if(student->month > 12 || student->date > 31)
-    {
+    } else if (student.month > 12 || student.date > 31) {
         return false;
     }
     return true;
 }
-//Func of check numbers of student's id
-bool checkId(const ST *student)
-{
-    long long idCopy = student->id;
+
+// Func of check numbers of student's id
+bool checkId(const Students& student) {
+    long long idCopy = student.id;
     int count = 0;
-    while(idCopy > 0)
-    {
+    while (idCopy > 0) {
         idCopy = idCopy / 10;
         count++;
     }
-    if(count != 10)
+    if (count != 10)
         return false;
     return true;
 }
-//Func of check possible GPA
-bool checkGpa(ST *student)
-{
-    if(student->gpa < 0 || student->gpa > 4)
+
+// Func of check possible GPA
+bool checkGpa(const Students& student) {
+    if (student.gpa < 0 || student.gpa > 4)
         return false;
     return true;
 }
-//Func of add student
-void addStudent(ST *stArr, int *numOfStudent)
-{
-    (*numOfStudent)++;
-    stArr = (ST*)realloc(stArr, *numOfStudent * sizeof(ST));
-    ST student;
+
+// Func of add student
+void addStudent(Students*& stArr, int& numOfStudent) {
+    numOfStudent++;
+    Students* newStArr = new Students[numOfStudent];
+    // Sao chép dữ liệu từ stArr sang newStArr
+    std::copy(stArr, stArr + numOfStudent, newStArr);
+    // Giải phóng bộ nhớ của stArr
+    delete[] stArr;
+    // Gán stArr trỏ đến newStArr
+    stArr = newStArr;
+    Students student;
     SET_COLOR(3);
-    printf("\nNhap ten sinh vien: ");
-    while(getchar() != '\n');
-    // Read the name and remove the newline character
-    fgets(student.name, sizeof(student.name), stdin);
-    size_t len = strlen(student.name);
-    if (len > 0 && student.name[len - 1] == '\n')
-    {
-        student.name[len - 1] = '\0'; // Remove the newline character
-    }
-    printf("\nNhap ma so sinh vien: ");
-    scanf("%lld", &student.id);
-    if(!checkId(&student))
-    {
+    cout << "\nNhap ten sinh vien: ";
+    cin.ignore();
+    getline(cin, student.name);
+
+    cout << "\nNhap ma so sinh vien: ";
+    cin >> student.id;
+    if (!checkId(student)) {
         SET_COLOR(4);
-        printf("Ma so sinh vien khong hop le!\n");
+        cout << "Ma so sinh vien khong hop le!\n";
         return;
     }
-    printf("\nNhap ngay thang nam sinh: ");
-    scanf("%d%d%d", &student.date, &student.month, &student.year);
-    if(!checkDob(&student))
-    {
+
+    cout << "\nNhap ngay thang nam sinh: ";
+    cin >> student.date >> student.month >> student.year;
+    if (!checkDob(student)) {
         SET_COLOR(4);
-        printf("Ngay thang hoac nam sinh khong hop le!\n");
+        cout << "Ngay thang hoac nam sinh khong hop le!\n";
         return;
     }
-    printf("\nNhap diem GPA: ");
-    while(getchar() != '\n');
-    scanf("%f", &student.gpa);
-    if(!checkGpa(&student))
-    {
+
+    cout << "\nNhap diem GPA: ";
+    cin >> student.gpa;
+    if (!checkGpa(student)) {
         SET_COLOR(4);
-        printf("GPA khong hop le!\n");
+        cout << "GPA khong hop le!\n";
         return;
     }
-    stArr[*numOfStudent-1] = student;
+
+    stArr[numOfStudent - 1] = student;
     SET_COLOR(10);
-    printf("\nThem sinh vien thanh cong!\n");
+    cout << "\nThem sinh vien thanh cong!\n";
 }
-//Func of print student list
-void printStudent(ST *stArr, int numOfStudent)
-{
+
+// Func of print student list
+void printStudent(const Students* stArr, int numOfStudent) {
     SET_COLOR(5);
-    printf("---------------------------------------------------------------------\n");
-    printf("||      Ten                  ||   MSSV     ||   Ngay sinh   ||   GPA   ||\n");
-    printf("---------------------------------------------------------------------\n");
-    for (int i = 0; i < numOfStudent; i++)
-    {
-        printf("|| %-25s || %-10lld ||  %02d/%02d/%04d   ||  %0.2f   ||\n",
-               stArr[i].name, stArr[i].id, stArr[i].date, stArr[i].month, stArr[i].year, stArr[i].gpa);
-        printf("---------------------------------------------------------------------\n");
+    cout << "---------------------------------------------------------------------\n";
+    cout << "||      Ten                  ||   MSSV     ||   Ngay sinh   ||   GPA   ||\n";
+    cout << "---------------------------------------------------------------------\n";
+    for (int i = 0; i < numOfStudent; i++) {
+        cout << "|| " << setw(25) << left << stArr[i].name << " || " << setw(10) << stArr[i].id << " ||  " << setfill('0') << setw(2) << stArr[i].date << "/" << setw(2) << stArr[i].month << "/" << setw(4) << stArr[i].year << "   ||  " << fixed << setprecision(2) << stArr[i].gpa << "   ||\n";
+        cout << "---------------------------------------------------------------------\n";
     }
 }
-//Func of update student's information
-void updateInfor(ST *stArr, int ordinal)
-{
-    ST student;
+
+// Func of update student's information
+void updateInfor(Students* stArr, int ordinal) {
+    Students student;
     SET_COLOR(3);
-    printf("\nNhap ten sinh vien: ");
-    while(getchar() != '\n');
-    fgets(student.name, sizeof(student.name), stdin);
-    printf("\nNhap ma so sinh vien: ");
-    scanf("%lld", &student.id);
-    if(!checkId(&student))
-    {
+    cout << "\nNhap ten sinh vien: ";
+    cin.ignore();
+    getline(cin, student.name);
+
+    cout << "\nNhap ma so sinh vien: ";
+    cin >> student.id;
+    if (!checkId(student)) {
         SET_COLOR(4);
-        printf("Ma so sinh vien khong hop le!\n");
+        cout << "Ma so sinh vien khong hop le!\n";
         return;
     }
-    printf("\nNhap ngay thang nam sinh: ");
-    scanf("%d%d%d", &student.date, &student.month, &student.year);
-    if(!checkDob(&student))
-    {
+
+    cout << "\nNhap ngay thang nam sinh: ";
+    cin >> student.date >> student.month >> student.year;
+    if (!checkDob(student)) {
         SET_COLOR(4);
-        printf("Ngay thang hoac nam sinh khong hop le!\n");
+        cout << "Ngay thang hoac nam sinh khong hop le!\n";
         return;
     }
-    printf("\nNhap diem GPA: ");
-    while(getchar() != '\n');
-    scanf("%f", &student.gpa);
-    if(!checkGpa(&student))
-    {
+
+    cout << "\nNhap diem GPA: ";
+    cin >> student.gpa;
+    if (!checkGpa(student)) {
         SET_COLOR(4);
-        printf("GPA khong hop le!\n");
+        cout << "GPA khong hop le!\n";
         return;
     }
+
     stArr[ordinal] = student;
     SET_COLOR(10);
-    printf("Thong tin da duoc cap nhat!\n");
+    cout << "Thong tin da duoc cap nhat!\n";
 }
-//Function of delete student
-void deleteStudent(ST *stArr, int ordinal, int *numOfStudent)
-{
-    if(ordinal < 0 || ordinal > *numOfStudent)
-    {
+
+// Function of delete student
+void deleteStudent(Students* stArr, int ordinal, int& numOfStudent) {
+    if (ordinal < 0 || ordinal >= numOfStudent) {
         SET_COLOR(4);
-        printf("So thu tu sinh vien khong chinh xac!");
+        cout << "So thu tu sinh vien khong chinh xac!";
         return;
     }
-    for (int i = ordinal; i <= *numOfStudent; i++)
-    {
+    for (int i = ordinal; i < numOfStudent - 1; i++) {
         stArr[i] = stArr[i + 1];
     }
-    (*numOfStudent)--;
+    numOfStudent--;
 }
-//Function of find student by student's name
-void findStudent(ST *stArr, const char *inputName, int &numOfStudent)
-{
-    for(int i = 0; i < numOfStudent; i++)
-    {
-        if(strcmp(stArr[i].name, inputName) == 0)
-        {
-            printStudent(stArr, numOfStudent);
+
+// Function of find student by student's name
+void findStudent(const Students* stArr, const string& inputName, int numOfStudent) {
+    bool found = false;
+    for (int i = 0; i < numOfStudent; i++) {
+        if (stArr[i].name == inputName) {
+            found = true;
+            printStudent(&stArr[i], 1);
+            break;
         }
     }
+    if (!found) {
+        SET_COLOR(4);
+        cout << "Khong tim thay sinh vien co ten: " << inputName << endl;
+    }
 }
-//Function of sort students by their GPA
-void sortStudentByGPA(ST *stArr, int *numOfStudent)
-{
-    for(int i = 0; i < *numOfStudent - 1; i++)
-    {
-        for(int j = i + 1; j < *numOfStudent; j++)
-        {
-            if(stArr[i].gpa < stArr[j].gpa)
-            {
-                ST tmp = stArr[i];
+
+// Function of sort students by their GPA
+void sortStudentByGPA(Students* stArr, int numOfStudent) {
+    for (int i = 0; i < numOfStudent - 1; i++) {
+        for (int j = i + 1; j < numOfStudent; j++) {
+            if (stArr[i].gpa < stArr[j].gpa) {
+                Students tmp = stArr[i];
                 stArr[i] = stArr[j];
                 stArr[j] = tmp;
             }
         }
     }
 }
-//Function of find the last name of student
-const char* findLastName(const char* fullName)
-{
-    const char* lastWhiteSpace = NULL;
-    for(const char* i = fullName; *i != '\0'; i++)
-    {
-        if (*i == '\n' || *i == '\0' || *i == ' ')
-        {
-            lastWhiteSpace = i;
-        }
-    }
-    return ((lastWhiteSpace != NULL) ? lastWhiteSpace + 1 : fullName); 
+
+// Function of find the last name of student
+const string findLastName(const string& fullName) {
+    size_t lastWhiteSpace = fullName.find_last_of(" ");
+    return ((lastWhiteSpace != string::npos) ? fullName.substr(lastWhiteSpace + 1) : fullName);
 }
-//Function of sort student's list by their name
-void sortStudentByName(ST *stArr, int *numOfStudent)
-{
-    for(int i = 0; i < *numOfStudent - 1; i++)
-    {
-        for(int j = i + 1; j < *numOfStudent; j++)
-        {
-            if(strcmp(findLastName(stArr[j].name), findLastName(stArr[j + 1].name)) < 0)
-            {
-                ST tmp = stArr[i];
+
+// Function of sort student's list by their name
+void sortStudentByName(Students* stArr, int numOfStudent) {
+    for (int i = 0; i < numOfStudent - 1; i++) {
+        for (int j = i + 1; j < numOfStudent; j++) {
+            if (findLastName(stArr[i].name) < findLastName(stArr[j].name)) {
+                Students tmp = stArr[i];
                 stArr[i] = stArr[j];
                 stArr[j] = tmp;
             }
         }
     }
 }
-//Function of clear screen
-void clearScreen()
-{
+
+// Function of clear screen
+void clearScreen() {
     system("cls");
 }
-//Funtion of print MENU
-void printMenu()
-{
+
+// Function of print MENU
+void printMenu() {
     SET_COLOR(10);
-    printf("************CHUONG TRINH QUAN LY SINH VIEN************\n");
+    cout << "************CHUONG TRINH QUAN LY SINH VIEN************\n";
     SET_COLOR(9);
-    printf("=======================================================\n");
+    cout << "=======================================================\n";
     SET_COLOR(6);
-    printf("\t\t\tMENU\n");
+    cout << "\t\t\tMENU\n";
     SET_COLOR(9);
-    printf("-------------------------------------------------------\n");
-    printf("||   1. Them sinh vien.                              ||\n");
-    printf("||   2. Cap nhat thong tin sinh vien.                ||\n");
-    printf("||   3. Xoa sinh vien.                               ||\n");
-    printf("||   4. Tim kiem sinh vien theo ten.                 ||\n");
-    printf("||   5. Sap xep sinh vien theo diem trung binh (GPA).||\n");
-    printf("||   6. Sap xep sinh vien theo ten.                  ||\n");
-    printf("||   7. Hien thi danh sach sinh vien.                ||\n");
-    printf("||   0. Thoat.                                       ||\n");
-    printf("-------------------------------------------------------\n");
+    cout << "-------------------------------------------------------\n";
+    cout << "||   1. Them sinh vien.                              ||\n";
+    cout << "||   2. Cap nhat thong tin sinh vien.                ||\n";
+    cout << "||   3. Xoa sinh vien.                               ||\n";
+    cout << "||   4. Tim kiem sinh vien theo ten.                 ||\n";
+    cout << "||   5. Sap xep sinh vien theo diem trung binh (GPA).||\n";
+    cout << "||   6. Sap xep sinh vien theo ten.                  ||\n";
+    cout << "||   7. Hien thi danh sach sinh vien.                ||\n";
+    cout << "||   0. Thoat.                                       ||\n";
+    cout << "-------------------------------------------------------\n";
     SET_COLOR(10);
-    printf("*******************************************************\n");
+    cout << "*******************************************************\n";
 }
-int main()
-{
-    ST *stArr = NULL;
-    stArr = (ST*)malloc(0);
+
+int main() {
+    Students* stArr = nullptr;
+    stArr = new Students[0];
     int numOfStudent = 0;
     int ordinal;
-    while(1)
-    {
+    string inputName;  // Di chuyển khai báo lên đây
+
+    while (1) {
         printMenu();
         SET_COLOR(7);
-        printf("Lua chon cua ban: ");
+        cout << "Lua chon cua ban: ";
         int choose;
-        scanf("%d", &choose);
-        switch(choose){
+        cin >> choose;
+
+        switch (choose) {
             case 1:
-                addStudent(stArr, &numOfStudent);
+                addStudent(stArr, numOfStudent);
                 system("pause");
                 clearScreen();
                 break;
             case 2:
-                if(numOfStudent == 0)
-                {
+                if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    printf("Khong co sinh vien trong danh sach!\n");
+                    cout << "Khong co sinh vien trong danh sach!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(3);
-                printf("Nhap so thu tu sinh vien can chinh sua: ");
-                scanf("%d", &ordinal);
-                updateInfor(stArr, ordinal);
+                cout << "Nhap so thu tu sinh vien can chinh sua: ";
+                cin >> ordinal;
+                updateInfor(stArr, ordinal - 1);
                 system("pause");
                 clearScreen();
                 break;
             case 3:
-                if(numOfStudent == 0)
-                {
+                if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    printf("Khong co sinh vien trong danh sach!\n");
+                    cout << "Khong co sinh vien trong danh sach!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(3);
-                printf("Nhap so thu tu sinh vien muon xoa: ");
-                scanf("%d", &ordinal);
-                deleteStudent(stArr, ordinal, &numOfStudent);
+                cout << "Nhap so thu tu sinh vien muon xoa: ";
+                cin >> ordinal;
+                deleteStudent(stArr, ordinal - 1, numOfStudent);
                 SET_COLOR(10);
-                printf("Xoa sinh vien thanh cong!");
+                cout << "Xoa sinh vien thanh cong!";
                 system("pause");
                 clearScreen();
                 break;
             case 4:
-                if(numOfStudent == 0)
-                {
+                if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    printf("Khong co sinh vien trong danh sach!\n");
+                    cout << "Khong co sinh vien trong danh sach!\n";
                     system("pause");
                     break;
                 }
-                char inputName[30];
                 SET_COLOR(3);
-                printf("Nhap ten sinh vien can tim kiem: ");
-                while(getchar() != '\n');
-                fgets(inputName, sizeof(inputName), stdin);
-                findStudent(stArr, inputName ,numOfStudent);
+                cout << "Nhap ten sinh vien can tim kiem: ";
+                cin.ignore();
+                getline(cin, inputName);
+                findStudent(stArr, inputName, numOfStudent);
                 system("pause");
                 clearScreen();
                 break;
             case 5:
-                if(numOfStudent == 0)
-                {
+                if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    printf("Khong co sinh vien trong danh sach!\n");
+                    cout << "Khong co sinh vien trong danh sach!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(10);
-                printf("Danh sach sau khi sap xep: \n");
-                sortStudentByGPA(stArr, &numOfStudent);
+                cout << "Danh sach sau khi sap xep: \n";
+                sortStudentByGPA(stArr, numOfStudent);
                 printStudent(stArr, numOfStudent);
                 system("pause");
                 clearScreen();
                 break;
             case 6:
-                if(numOfStudent == 0)
-                {
+                if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    printf("Khong co sinh vien trong danh sach!\n");
+                    cout << "Khong co sinh vien trong danh sach!\n";
                     system("pause");
                     break;
                 }
                 SET_COLOR(10);
-                printf("Danh sach sau khi sap xep: \n");
-                sortStudentByName(stArr, &numOfStudent);
+                cout << "Danh sach sau khi sap xep: \n";
+                sortStudentByName(stArr, numOfStudent);
                 printStudent(stArr, numOfStudent);
                 system("pause");
                 clearScreen();
                 break;
             case 7:
-                if(numOfStudent == 0)
-                {
+                if (numOfStudent == 0) {
                     SET_COLOR(4);
-                    printf("Khong co sinh vien trong danh sach!\n");
+                    cout << "Khong co sinh vien trong danh sach!\n";
                     system("pause");
                     break;
                 }
@@ -378,13 +353,15 @@ int main()
                 break;
             case 0:
                 SET_COLOR(4);
-                printf("Ban da thoat chuong trinh!\n");
+                cout << "Ban da thoat chuong trinh!\n";
                 system("pause");
+                delete[] stArr; // Giải phóng bộ nhớ trước khi thoát
                 return 0;
             default:
                 SET_COLOR(4);
-                printf("Lua chon khong nam trong MENU.\n");
+                cout << "Lua chon khong nam trong MENU.\n";
                 system("pause");
+                delete[] stArr; // Giải phóng bộ nhớ trước khi thoát
                 return 0;
         }
     }
