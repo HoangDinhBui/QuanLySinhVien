@@ -126,7 +126,7 @@ void printStudent(const Students* stArr, int numOfStudent) {
     wcout << L"---------------------------------------------------------------------\n";
     for (int i = 0; i < numOfStudent; i++) {
         wcout << L"|| " << setw(25) << left << stArr[i].name << L" || " << setw(10) << stArr[i].id << L" ||  " << setfill(L'0') << setw(2) << stArr[i].date << L"/" << setw(2) << stArr[i].month << L"/" << setw(4) << stArr[i].year << L"   ||  " << fixed << setprecision(2) << stArr[i].gpa << L"   ||\n";
-        wcout << L"---------------------------------------------------------------------\n";
+        wcout << L"||---------------------------||------------||---------------||-------  ||\n";
     }
 }
 
@@ -362,6 +362,7 @@ int main() {
                     SET_COLOR(4);
                     wcout << L"Không có sinh viên trong danh sách!\n";
                     system("pause");
+                    clearScreen();
                     break;
                 }
                 printStudent(stArr, numOfStudent);
